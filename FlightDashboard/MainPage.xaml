@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="FlightDashboard.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:FlightDashboard"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <NavigationView
+        x:Name="AppNavigation"
+        AutomationProperties.AutomationId="NavMain"
+        IsBackButtonVisible="Collapsed"
+        IsSettingsVisible="False"
+        PaneDisplayMode="Left"
+        SelectionChanged="Navigation_SelectionChanged">
+        <NavigationView.MenuItems>
+            <NavigationViewItem
+                x:Name="OverviewNavItem"
+                AutomationProperties.AutomationId="NavOverview"
+                Content="Overview"
+                IsSelected="True"
+                Tag="Overview">
+                <NavigationViewItem.Icon>
+                    <SymbolIcon Symbol="Home" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItem
+                AutomationProperties.AutomationId="NavFlights"
+                Content="Flights"
+                Tag="Flights">
+                <NavigationViewItem.Icon>
+                    <SymbolIcon Symbol="Map" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItem
+                AutomationProperties.AutomationId="NavInsights"
+                Content="Insights"
+                Tag="Insights">
+                <NavigationViewItem.Icon>
+                    <SymbolIcon Symbol="View" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItem
+                AutomationProperties.AutomationId="NavSettings"
+                Content="Settings"
+                Tag="Settings">
+                <NavigationViewItem.Icon>
+                    <SymbolIcon Symbol="Setting" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+        </NavigationView.MenuItems>
+
+        <NavigationView.Header>
+            <Grid
+                ColumnDefinitions="*,Auto,Auto"
+                ColumnSpacing="16"
+                Padding="24,12,24,12">
+                <StackPanel Spacing="2">
+                    <TextBlock
+                        Style="{StaticResource TitleTextBlockStyle}"
+                        Text="Flight operations" />
+                    <TextBlock
+                        AutomationProperties.AutomationId="TxtFeedState"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{StaticResource CaptionTextBlockStyle}"
+                        Text="{x:Bind ViewModel.FeedState, Mode=OneWay}" />
+                </StackPanel>
+                <ProgressRing
+                    Grid.Column="1"
+                    Width="20"
+                    Height="20"
+                    IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}"
+                    VerticalAlignment="Center" />
+                <Button
+                    Grid.Column="2"
+                    AutomationProperties.AutomationId="BtnRefresh"
+                    Command="{x:Bind ViewModel.RefreshCommand}"
+                    Content="Refresh"
+                    VerticalAlignment="Center">
+                    <Button.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="R" Modifiers="Control" />
+                    </Button.KeyboardAccelerators>
+                </Button>
+            </Grid>
+        </NavigationView.Header>
+
+        <Frame x:Name="ContentFrame" />
+    </NavigationView>
+</Page>

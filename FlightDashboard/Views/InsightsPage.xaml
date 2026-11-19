@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="FlightDashboard.Views.InsightsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:models="using:FlightDashboard.Models"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <ScrollViewer
+        HorizontalScrollBarVisibility="Disabled"
+        VerticalScrollBarVisibility="Auto">
+        <StackPanel Padding="32,20,32,32" Spacing="20">
+            <StackPanel Spacing="4">
+                <TextBlock
+                    Style="{StaticResource TitleTextBlockStyle}"
+                    Text="Traffic insights" />
+                <TextBlock
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{StaticResource BodyTextBlockStyle}"
+                    Text="A closer look at the aircraft and altitude reported in this snapshot." />
+            </StackPanel>
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="16">
+                <Border
+                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    CornerRadius="{ThemeResource ControlCornerRadius}"
+                    Padding="22">
+                    <StackPanel Spacing="16">
+                        <StackPanel Spacing="4">
+                            <TextBlock
+                                Style="{StaticResource BodyStrongTextBlockStyle}"
+                                Text="Aircraft type coverage" />
+                            <TextBlock
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Style="{StaticResource CaptionTextBlockStyle}"
+                                Text="{x:Bind ViewModel.TypeCoverageLabel, Mode=OneWay}" />
+                        </StackPanel>
+                        <ProgressBar
+                            AutomationProperties.AutomationId="TypeCoverageBar"
+                            Maximum="100"
+                            Value="{x:Bind ViewModel.TypeCoveragePercent, Mode=OneWay}" />
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{StaticResource BodyTextBlockStyle}"
+                            Text="Aircraft type is shown only when the feed includes a type code. Unknown values stay unknown; they are not inferred." />
+                    </StackPanel>
+                </Border>
+                <Border
+                    Grid.Column="1"
+                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    CornerRadius="{ThemeResource ControlCornerRadius}"
+                    Padding="22">
+                    <StackPanel Spacing="12">
+                        <TextBlock
+                            Style="{StaticResource BodyStrongTextBlockStyle}"
+                            Text="Most reported aircraft types" />
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            Text="Type codes appear only when supplied by the feed." />
+                        <ItemsControl ItemsSource="{x:Bind ViewModel.TypeBreakdown, Mode=OneWay}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="models:DistributionItem">
+                                    <Grid
+                                        ColumnDefinitions="68,*,40"
+                                        ColumnSpacing="12"
+                                        Margin="0,4">
+                                        <TextBlock Text="{x:Bind Label, Mode=OneTime}" VerticalAlignment="Center" />
+                                        <ProgressBar
+                                            Grid.Column="1"
+                                            Maximum="100"
+                                            Value="{x:Bind Percentage, Mode=OneTime}" />
+                                        <TextBlock
+                                            Grid.Column="2"
+                                            HorizontalAlignment="Right"
+                                            Text="{x:Bind Count, Mode=OneTime}"
+                                            VerticalAlignment="Center" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Border
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="{ThemeResource ControlCornerRadius}"
+                Padding="22">
+                <StackPanel Spacing="12">
+                    <StackPanel Spacing="4">
+                        <TextBlock
+                            Style="{StaticResource BodyStrongTextBlockStyle}"
+                            Text="Reported altitude bands" />
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            Text="Barometric altitude from the selected snapshot; aircraft without an altitude are omitted." />
+                    </StackPanel>
+                    <ItemsControl ItemsSource="{x:Bind ViewModel.AltitudeBreakdown, Mode=OneWay}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="models:DistributionItem">
+                                <Grid
+                                    ColumnDefinitions="180,*,44"
+                                    ColumnSpacing="12"
+                                    Margin="0,4">
+                                    <TextBlock
+                                        Text="{x:Bind Label, Mode=OneTime}"
+                                        VerticalAlignment="Center" />
+                                    <ProgressBar
+                                        Grid.Column="1"
+                                        Maximum="100"
+                                        Value="{x:Bind Percentage, Mode=OneTime}" />
+                                    <TextBlock
+                                        Grid.Column="2"
+                                        HorizontalAlignment="Right"
+                                        Text="{x:Bind Count, Mode=OneTime}"
+                                        VerticalAlignment="Center" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <Border
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="{ThemeResource ControlCornerRadius}"
+                Padding="22">
+                <StackPanel Spacing="8">
+                    <TextBlock
+                        Style="{StaticResource BodyStrongTextBlockStyle}"
+                        Text="Snapshot boundaries" />
+                    <TextBlock
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{StaticResource BodyTextBlockStyle}"
+                        Text="This view is a regional ADS-B snapshot, not a complete worldwide census. Coverage depends on community receivers, aircraft transponders, and the selected radius. Reported speed, altitude, and type may be missing or delayed." />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="FlightDashboard.Views.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <ScrollViewer
+        HorizontalScrollBarVisibility="Disabled"
+        VerticalScrollBarVisibility="Auto">
+        <StackPanel Padding="32,20,32,32" Spacing="20">
+            <StackPanel Spacing="4">
+                <TextBlock
+                    Style="{StaticResource TitleTextBlockStyle}"
+                    Text="Settings and data source" />
+                <TextBlock
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{StaticResource BodyTextBlockStyle}"
+                    Text="Choose repeatable sample traffic or request a fresh community feed snapshot." />
+            </StackPanel>
+
+            <InfoBar
+                AutomationProperties.AutomationId="InfoFeedWarning"
+                IsClosable="False"
+                IsOpen="{x:Bind ViewModel.HasFeedWarning, Mode=OneWay}"
+                Message="{x:Bind ViewModel.FeedWarningMessage, Mode=OneWay}"
+                Severity="Warning"
+                Title="{x:Bind ViewModel.FeedWarningTitle, Mode=OneWay}" />
+
+            <Border
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="{ThemeResource ControlCornerRadius}"
+                Padding="24">
+                <StackPanel Spacing="16">
+                    <StackPanel Spacing="4">
+                        <TextBlock
+                            Style="{StaticResource BodyStrongTextBlockStyle}"
+                            Text="Demo mode" />
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{StaticResource BodyTextBlockStyle}"
+                            Text="Use generated aircraft to keep demos full and predictable. The screen will label sample traffic and never present it as live." />
+                    </StackPanel>
+                    <ToggleSwitch
+                        AutomationProperties.AutomationId="ToggleDemoMode"
+                        AutomationProperties.Name="Use synthetic demo flights"
+                        Header="Use synthetic demo flights"
+                        IsOn="{x:Bind ViewModel.IsDemoMode, Mode=TwoWay}"
+                        OffContent="Off · request live data"
+                        OnContent="On · synthetic data" />
+                </StackPanel>
+            </Border>
+
+            <Border
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="{ThemeResource ControlCornerRadius}"
+                Padding="24">
+                <StackPanel Spacing="16">
+                    <StackPanel Spacing="4">
+                        <TextBlock
+                            Style="{StaticResource BodyStrongTextBlockStyle}"
+                            Text="Search radius" />
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{StaticResource BodyTextBlockStyle}"
+                            Text="The ADS-B.lol regional endpoint supports a radius up to 250 nautical miles. Changing this value affects the next live refresh." />
+                    </StackPanel>
+                    <Grid ColumnDefinitions="240,*" ColumnSpacing="16">
+                        <NumberBox
+                            AutomationProperties.AutomationId="RadiusNauticalMiles"
+                            AutomationProperties.Name="Search radius in nautical miles"
+                            Header="Radius (nautical miles)"
+                            LargeChange="25"
+                            Maximum="250"
+                            Minimum="25"
+                            SmallChange="25"
+                            SpinButtonPlacementMode="Compact"
+                            Value="{x:Bind ViewModel.SearchRadius, Mode=TwoWay}" />
+                        <StackPanel
+                            Grid.Column="1"
+                            Spacing="8"
+                            VerticalAlignment="Center">
+                            <TextBlock
+                                Style="{StaticResource BodyStrongTextBlockStyle}"
+                                Text="Current coverage" />
+                            <TextBlock
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Style="{StaticResource BodyTextBlockStyle}"
+                                Text="Centered near 39.5° N, 98.35° W · Heartland, USA" />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <Border
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="{ThemeResource ControlCornerRadius}"
+                Padding="24">
+                <StackPanel Spacing="12">
+                    <TextBlock
+                        Style="{StaticResource BodyStrongTextBlockStyle}"
+                        Text="Open community feed" />
+                    <TextBlock
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{StaticResource BodyTextBlockStyle}"
+                        Text="ADSB.lol is a community-built ADS-B feed. Aircraft visibility and metadata vary by receiver coverage and reporting aircraft. No sign-in or API key is configured by this demo." />
+                    <HyperlinkButton
+                        AutomationProperties.AutomationId="LinkAdsbLol"
+                        Content="ADSB.lol API and documentation"
+                        NavigateUri="https://www.adsb.lol/" />
+                    <TextBlock
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{StaticResource CaptionTextBlockStyle}"
+                        Text="{x:Bind ViewModel.UpdatedLabel, Mode=OneWay}" />
+                </StackPanel>
+            </Border>
+
+            <Button
+                AutomationProperties.AutomationId="BtnRefreshSettings"
+                Command="{x:Bind ViewModel.RefreshCommand}"
+                Content="Refresh snapshot" />
+        </StackPanel>
+    </ScrollViewer>
+</Page>
